@@ -109,8 +109,9 @@ MonoBehaviour:
   beamAudioSource: {fileID: 8667603017298556199}
   explodingNodePrefab: {fileID: 5866018116935325895, guid: 7d3351b631d0e074a809d624a486e9ab, type: 3}
   reviveIconPrefab: {fileID: 6035549355868785475, guid: 0c5f4acbb38b28047ae838e75fff68a2, type: 3}
+  enableAFKKick: 1
   particleSys: {fileID: 0}
-  afkKickTime: 20
+  afkKickTime: 30
 --- !u!143 &516111362651890421
 CharacterController:
   m_ObjectHideFlags: 0

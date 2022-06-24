@@ -249,6 +249,14 @@ public class BeamController : MonoBehaviour
 		Destroy(beam);
 
 		nodePositionlist.Clear();
+
+		//There's no beam, so we can't be sped up - decrease the nodes speed
+		foreach (GameObject node in ownerNodeList)
+		{
+			//If there's a beam we're colliding with - increase the nodes speed
+			NodeController nodeController = node.gameObject.GetComponent<NodeController>();
+			nodeController.DecreaseNodeSpeed(0);
+		}
 	}
 
 	public void SetBeamColour(Color color)

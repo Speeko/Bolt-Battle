@@ -12,6 +12,11 @@ public class BeamCollisions : MonoBehaviour
 
 	PlayerController playerController;
 
+	bool collidingWithBeam;
+	bool wasCollidingWithBeamLastFrame;
+
+	GameObject collidingBeam;
+
 	#endregion
 
 	void Awake()
@@ -31,7 +36,41 @@ public class BeamCollisions : MonoBehaviour
 
 	}
 
-	void OnTriggerEnter(Collider collider)
+	void Update()
+	{
+		//Check if there's a beam we're colliding with
+		if (collidingBeam != null)
+		{
+			foreach (GameObject node in ownerNodes)
+			{
+				//If there's a beam we're colliding with - increase the nodes speed
+				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
+				nodeController.IncreaseNodeSpeed(0);
+			}
+		}
+		else
+		{
+			foreach (GameObject node in ownerNodes)
+			{
+				//If there's no beam, decrease the nodes speed
+				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
+				nodeController.DecreaseNodeSpeed(0);
+			}
+		}
+
+	}
+
+	void OnDestroy()
+	{
+		//Our beam is being destroyed, we need to slow the nodes
+		foreach (GameObject node in ownerNodes)
+		{
+			NodeController nodeController = node.gameObject.GetComponent<NodeController>();
+			nodeController.DecreaseNodeSpeed(0);
+		}
+	}
+
+	void OnTriggerStay(Collider collider)
 	{
 		if (collider.gameObject.tag == "Node" || collider.gameObject.tag == "EnemyAI")
 		{
@@ -47,26 +86,9 @@ public class BeamCollisions : MonoBehaviour
 
 		if (collider.gameObject.tag == "Beam")
 		{
-			//PlayerController playerController = transform.parent.gameObject.GetComponent<PlayerController>();
-			foreach (GameObject node in ownerNodes)
-			{
-				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
-				nodeController.IncreaseNodeSpeed(0);
-			}
+			//If we're colliding with another beam - remember what the beam is.
+			collidingBeam = collider.gameObject;
 		}
 	}
 
-	//TODO: This is not being called because the beam is destroyed before ever exiting the trigger
-	void OnTriggerExit(Collider collider)
-	{
-		if (collider.gameObject.tag == "Beam")
-		{
-			foreach (GameObject node in ownerNodes)
-			{
-				Debug.Log("Exiting beam collision");
-				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
-				nodeController.DecreaseNodeSpeed(0);
-			}
-		}
-	}
 }

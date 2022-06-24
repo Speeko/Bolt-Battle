@@ -19,6 +19,8 @@ public class NodeController : MonoBehaviour
 	public GameObject explodingNodePrefab;
 	public GameObject reviveIconPrefab;
 
+	public bool enableAFKKick;
+
 	GameController gameController;
 
 	//This represents our current speed. See IncreaseNodeSpeed() and DecreaseNodeSpeed()
@@ -61,7 +63,6 @@ public class NodeController : MonoBehaviour
 
 	float afkTimer = 0;
 	public float afkKickTime;
-
 
 	#endregion
 
@@ -239,14 +240,16 @@ public class NodeController : MonoBehaviour
 	{
 		//TODO: Using hardcoded up/down values for now, I feel like this could be better implemented
 		//Debug.Log("Increasing speed of node: " + gameObject);
-		playerCurrentSpeed = playerController.GetPlayerNormalSpeed();
+		if (playerCurrentSpeed != playerController.GetPlayerNormalSpeed())
+			playerCurrentSpeed = playerController.GetPlayerNormalSpeed();
 	}
 
 	public void DecreaseNodeSpeed(float speed)
 	{
 		//Decrement speed
 		//Debug.Log("Decreasing speed of node: " + gameObject);
-		playerCurrentSpeed = playerController.GetPlayerSlowedSpeed();
+		if (playerCurrentSpeed != playerController.GetPlayerSlowedSpeed())
+			playerCurrentSpeed = playerController.GetPlayerSlowedSpeed();
 	}
 
 	public void SetNodeColour(Color colour, Color particlesColour)
@@ -363,7 +366,7 @@ public class NodeController : MonoBehaviour
 
 		afkTimer += Time.deltaTime;
 
-		if (afkTimer > afkKickTime)
+		if (afkTimer > afkKickTime && enableAFKKick == true)
 			DestroyNode();
 	}
 
