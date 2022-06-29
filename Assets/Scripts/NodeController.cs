@@ -203,6 +203,8 @@ public class NodeController : MonoBehaviour
 			if (context.started)
 			{
 
+				DecreaseNodeSpeed(0);
+
 				//If our twin node exists...
 				if (twinNode.activeSelf == true)
 				{
@@ -227,6 +229,8 @@ public class NodeController : MonoBehaviour
 			if (context.canceled)
 			{
 
+				IncreaseNodeSpeed(0);
+
 				//Stop the beam audio
 				beamAudioSource.Stop();
 
@@ -235,8 +239,6 @@ public class NodeController : MonoBehaviour
 				{
 					//Tell the BeamController on our parent that we've stopped trying
 					beamController.StopTryBeam(gameObject, false);
-
-					IncreaseNodeSpeed(0);
 
 					//Tell the rest of our script that we've stopped trying.
 					tryingBeam = false;
@@ -352,6 +354,7 @@ public class NodeController : MonoBehaviour
 	{
 		characterController.enabled = true;
 		isDead = false;
+		IncreaseNodeSpeed(0);
 	}
 
 	void FixedUpdate()

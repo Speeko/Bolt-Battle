@@ -38,6 +38,7 @@ public class BeamCollisions : MonoBehaviour
 
 	void Update()
 	{
+		//TODO: Make this more robust and don't call in update
 		//Check if there's a beam we're colliding with
 		if (collidingBeam != null)
 		{
@@ -48,25 +49,19 @@ public class BeamCollisions : MonoBehaviour
 				nodeController.IncreaseNodeSpeed(0);
 			}
 		}
-		else
-		{
-			foreach (GameObject node in ownerNodes)
-			{
-				//If there's no beam, decrease the nodes speed
-				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
-				nodeController.DecreaseNodeSpeed(0);
-			}
-		}
 
 	}
 
 	void OnDestroy()
 	{
-		//Our beam is being destroyed, we need to slow the nodes
-		foreach (GameObject node in ownerNodes)
+		//Our beam is being destroyed, we need to slow the nodes if there was a collision
+		if (collidingBeam != null)
 		{
-			NodeController nodeController = node.gameObject.GetComponent<NodeController>();
-			nodeController.DecreaseNodeSpeed(0);
+			foreach (GameObject node in ownerNodes)
+			{
+				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
+				nodeController.DecreaseNodeSpeed(0);
+			}
 		}
 	}
 
@@ -88,6 +83,14 @@ public class BeamCollisions : MonoBehaviour
 		{
 			//If we're colliding with another beam - remember what the beam is.
 			collidingBeam = collider.gameObject;
+		}
+	}
+
+	void OnTriggerExit(Collider collider)
+	{
+		if (collider.gameObject.tag == "Beam")
+		{
+			collidingBeam = null;
 		}
 	}
 

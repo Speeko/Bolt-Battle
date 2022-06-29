@@ -127,7 +127,7 @@ public class BeamController : MonoBehaviour
 
 		//Lower the requsting node's speed
 		NodeController requestingNodeController = requestingNode.GetComponent<NodeController>();
-		requestingNodeController.DecreaseNodeSpeed(0);
+		//requestingNodeController.DecreaseNodeSpeed(0);
 
 		//If we already have two nodes...
 		if (nodeBeamList.Count > 1)
@@ -169,8 +169,9 @@ public class BeamController : MonoBehaviour
 		if (nodeBeamList.Contains(requestingNode))
 		{
 
+			//Increase the node speed
 			NodeController requestingNodeController = requestingNode.GetComponent<NodeController>();
-			requestingNodeController.IncreaseNodeSpeed(0);
+			//requestingNodeController.IncreaseNodeSpeed(0);
 
 			//Stop the beam, we know we require 2 nodes to have a beam
 			StopBeam();
@@ -179,18 +180,6 @@ public class BeamController : MonoBehaviour
 			nodeBeamList.Remove(requestingNode);
 			nodeBeamList.TrimExcess();
 
-			// //If this is our last node and it was destroyed, destroy our player
-			// if (destroyed == true)
-			// {
-			// 	ownerNodeList.Remove(requestingNode);
-			// 	ownerNodeList.TrimExcess();
-
-			// 	if (ownerNodeList.Count == 0)
-			// 	{
-			// 		Debug.Log("Destroying Player");
-			// 		Destroy(gameObject);
-			// 	}
-			// }
 		}
 	}
 
@@ -250,13 +239,6 @@ public class BeamController : MonoBehaviour
 
 		nodePositionlist.Clear();
 
-		//There's no beam, so we can't be sped up - decrease the nodes speed
-		foreach (GameObject node in ownerNodeList)
-		{
-			//If there's a beam we're colliding with - increase the nodes speed
-			NodeController nodeController = node.gameObject.GetComponent<NodeController>();
-			nodeController.DecreaseNodeSpeed(0);
-		}
 	}
 
 	public void SetBeamColour(Color color)
@@ -272,11 +254,11 @@ public class BeamController : MonoBehaviour
 
 			if (collisionBegin == true)
 			{
-				thisNode.IncreaseNodeSpeed(0);
+				//thisNode.IncreaseNodeSpeed(0);
 			}
 			else
 			{
-				thisNode.DecreaseNodeSpeed(0);
+				//thisNode.DecreaseNodeSpeed(0);
 			}
 
 		}
