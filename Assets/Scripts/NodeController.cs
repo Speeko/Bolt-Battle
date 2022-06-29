@@ -152,6 +152,19 @@ public class NodeController : MonoBehaviour
 
 			}
 
+			//If movement input held...
+			if (context.performed)
+			{
+				//Get the movement value from the input and store it to currentMovementInput
+				currentMovementInput = context.ReadValue<Vector2>();
+
+				//Set lastMovementDirection to our current input
+				lastMovementDirection = new Vector3(currentMovementInput.x, 0.0f, currentMovementInput.y);
+
+				//Tell the script we're moving
+				isMoving = true;
+			}
+
 			//If cancelled (input stopped) then store the last movement direction and zero our current movement
 			if (context.canceled)
 			{
@@ -173,18 +186,7 @@ public class NodeController : MonoBehaviour
 				isMoving = false;
 			}
 
-			//If movement input held...
-			if (context.performed)
-			{
-				//Get the movement value from the input and store it to currentMovementInput
-				currentMovementInput = context.ReadValue<Vector2>();
 
-				//Set lastMovementDirection to our current input
-				lastMovementDirection = new Vector3(currentMovementInput.x, 0.0f, currentMovementInput.y);
-
-				//Tell the script we're moving
-				isMoving = true;
-			}
 
 		}
 	}
@@ -234,6 +236,8 @@ public class NodeController : MonoBehaviour
 					//Tell the BeamController on our parent that we've stopped trying
 					beamController.StopTryBeam(gameObject, false);
 
+					IncreaseNodeSpeed(0);
+
 					//Tell the rest of our script that we've stopped trying.
 					tryingBeam = false;
 
@@ -245,20 +249,26 @@ public class NodeController : MonoBehaviour
 		}
 	}
 
+	//Called from various places to increment the node speed
 	public void IncreaseNodeSpeed(float speed)
 	{
 		//TODO: Using hardcoded up/down values for now, I feel like this could be better implemented
 		//Debug.Log("Increasing speed of node: " + gameObject);
 		if (playerCurrentSpeed != playerController.GetPlayerNormalSpeed())
 			playerCurrentSpeed = playerController.GetPlayerNormalSpeed();
+
+		Debug.Log(gameObject + " speed increased!");
 	}
 
+	//Called from various places to decrement the node speed
 	public void DecreaseNodeSpeed(float speed)
 	{
 		//Decrement speed
 		//Debug.Log("Decreasing speed of node: " + gameObject);
 		if (playerCurrentSpeed != playerController.GetPlayerSlowedSpeed())
 			playerCurrentSpeed = playerController.GetPlayerSlowedSpeed();
+
+		Debug.Log(gameObject + " speed decreased!");
 	}
 
 	//Called by the PlayerController on our parent to set the colours of this node and its particle system
@@ -337,6 +347,7 @@ public class NodeController : MonoBehaviour
 
 	}
 
+	//If our respawn icon has been touched by our twin node, revives this node
 	public void Respawn()
 	{
 		characterController.enabled = true;
