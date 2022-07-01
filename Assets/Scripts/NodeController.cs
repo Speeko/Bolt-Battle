@@ -259,7 +259,6 @@ public class NodeController : MonoBehaviour
 		if (playerCurrentSpeed != playerController.GetPlayerNormalSpeed())
 			playerCurrentSpeed = playerController.GetPlayerNormalSpeed();
 
-		Debug.Log(gameObject + " speed increased!");
 	}
 
 	//Called from various places to decrement the node speed
@@ -270,7 +269,6 @@ public class NodeController : MonoBehaviour
 		if (playerCurrentSpeed != playerController.GetPlayerSlowedSpeed())
 			playerCurrentSpeed = playerController.GetPlayerSlowedSpeed();
 
-		Debug.Log(gameObject + " speed decreased!");
 	}
 
 	//Called by the PlayerController on our parent to set the colours of this node and its particle system
@@ -435,6 +433,13 @@ public class NodeController : MonoBehaviour
 
 	}
 
-
+	void OnTriggerEnter(Collider collider)
+	{
+		if (collider.gameObject.tag == "Pickup")
+		{
+			beamController.UpdateBeamDistance(10);
+			Destroy(collider.gameObject);
+		}
+	}
 
 }

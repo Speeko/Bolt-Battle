@@ -25,6 +25,9 @@ public class SpawnPointController : MonoBehaviour
 
 	public bool CanISpawn()
 	{
+
+		//TODO: Change this to a spherecast - allow it to be used by both player spawning and container spawning.
+
 		if (canSpawnHere == true)
 		{
 			return true;

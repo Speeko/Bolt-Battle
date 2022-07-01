@@ -8,6 +8,9 @@ TagManager:
   - Beam
   - EnemyAI
   - Ground
+  - Obstacle
+  - Container
+  - Pickup
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - UI
   - Nodes
   - Ground
-  - 
+  - Obstacle
   - 
   - 
   - 

@@ -30,9 +30,10 @@ public class BeamController : MonoBehaviour
 	bool beamEstablished = false;
 
 	//Public floats for input in the Unity Editor
-	public float startingBeamDistance;
-	public float maxBeamDistance;
-	public float maxAllowedBeamDistance;
+	public float startingBeamDistance; //On player spawn this is the max allowed beam distance
+	public float currentBeamDistance; //This is the players current max allowed beam distance
+	public float maxAllowedBeamDistance; //This is the game's maximum allowed beam distance (should be the same for all players) TODO: Move this into the GameController and call GetVars()
+	public float beamIncreaseIncrement; //When collecting a pickup - increase beam size by this amount
 
 	//This is our list of node GameObjects invovled with making this beam
 	public List<GameObject> ownerNodeList;
@@ -46,7 +47,7 @@ public class BeamController : MonoBehaviour
 
 	void Start()
 	{
-		maxAllowedBeamDistance = startingBeamDistance;
+		currentBeamDistance = startingBeamDistance;
 	}
 
 	// Update is called once per frame
@@ -96,9 +97,14 @@ public class BeamController : MonoBehaviour
 
 	public void UpdateBeamDistance(float distanceIncrease)
 	{
-		if ((maxBeamDistance + distanceIncrease) < maxAllowedBeamDistance)
+
+		if ((currentBeamDistance + beamIncreaseIncrement) <= maxAllowedBeamDistance)
 		{
-			maxBeamDistance = maxBeamDistance + distanceIncrease;
+			currentBeamDistance = currentBeamDistance + beamIncreaseIncrement;
+		}
+		else
+		{
+			currentBeamDistance = maxAllowedBeamDistance;
 		}
 
 	}
@@ -110,16 +116,20 @@ public class BeamController : MonoBehaviour
 		//Get the distance between the two node vectors
 		float distance = Vector3.Distance(node1Position, node2Position);
 
-		if (distance >= startingBeamDistance && distance <= maxBeamDistance)
+		if (distance <= currentBeamDistance)
 		{
-			beamEstablished = true;
-			return distance;
+
+			//Call DoShootRay to check if this beam is allowed (ie: no obstacles)
+			if (DoShootRay(node1Position, (node2Position - node1Position), distance) == true)
+			{
+				beamEstablished = true;
+				return distance;
+			}
+
 		}
-		else
-		{
-			beamEstablished = false;
-			return 0;
-		}
+
+		beamEstablished = false;
+		return 0;
 	}
 
 	public void TryBeam(GameObject requestingNode)
@@ -132,7 +142,6 @@ public class BeamController : MonoBehaviour
 		//If we already have two nodes...
 		if (nodeBeamList.Count > 1)
 		{
-
 			//If we're close enough...
 			if (CloseEnoughForBeam(nodeBeamList[0].transform.position, nodeBeamList[1].transform.position) > 0)
 			{
@@ -263,4 +272,29 @@ public class BeamController : MonoBehaviour
 
 		}
 	}
+
+	bool DoShootRay(Vector3 source, Vector3 direction, float distance) //Shoots a ray and returns true if there were no obstacles
+	{
+		//Draw a debug line on the screen to represent this raycast
+		//Debug.DrawLine(source, source + (direction * distance), Color.magenta, 0.1f);
+
+		//Debug.Log("Shooting a ray from [" + source + "] to [" + source + (direction * distance) + "]");
+
+		//Create an array of raycast hits along our path
+		RaycastHit[] hits = Physics.RaycastAll(source, direction, distance);
+
+		for (int i = 0; i < hits.Length; i++)
+		{
+			RaycastHit hit = hits[i];
+
+			//Debug.Log("Raycast hit! " + hit.collider.gameObject);
+
+			if (hit.collider.gameObject.tag == "Obstacle")
+			{ return false; }
+
+		}
+
+		return true;
+	}
+
 }

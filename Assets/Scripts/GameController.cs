@@ -39,7 +39,13 @@ public class GameController : MonoBehaviour
 
 	}
 
-	//Called by the InputManager when "start" is pressed
+	public void GetVars()
+	{
+		//Other scripts should call this one to get global game options
+		//TODO...
+	}
+
+	//Called by the InputManager when "start" is pressed on any controller
 	public void IncomingPlayer(PlayerInput playerInput)
 	{
 		//Get our incoming player GameObject
@@ -71,45 +77,14 @@ public class GameController : MonoBehaviour
 	//Called by the InputManager when a player gameobject is destroyed
 	public void DisconnectPlayer(PlayerInput playerInput)
 	{
-		//TODO: If a player is killed, call this to elegantly disconnect them
-		//Debug.Log("Player has left:  " + playerInput.gameObject);
-
-		//TODO: Return the players colour back to the pool
-		//MeshRenderer nodeMesh = playerInput.gameObject.GetComponentInChildren<MeshRenderer>();
-
-		// //TODO: This sucks, implement it better
-		// if (nodeMesh.material.color.r > 0 && nodeMesh.material.color.g > 0 && nodeMesh.material.color.b > 0)
-		// {
-		// 	//Node was purple, return white to the poool
-		// 	availableColours.Add(new Color(0.75f, 0.2f, 0.75f, 1.0f)); //PURPLE
-		// }
-
-		// else if (nodeMesh.material.color.r > 0)
-		// {
-		// 	//Node was red, return red to the pool
-		// 	availableColours.Add(new Color(0.5f, 0f, 0f, 1.0f)); //RED
-		// }
-
-		// else if (nodeMesh.material.color.g > 0)
-		// {
-		// 	//Node was green, return red to the pool
-		// 	availableColours.Add(new Color(0f, 0.5f, 0f, 1.0f)); //GREEN
-		// }
-
-		// else if (nodeMesh.material.color.b > 0)
-		// {
-		// 	//Node was blue, return red to the pool
-		// 	availableColours.Add(new Color(0f, 0f, 0.5f, 1.0f)); //BLUE
-		// }
-
-		//		availableColours.TrimExcess();
-
 
 	}
 
-	//Checks all spawn points and spawns player if there is no one else in range
+	//Checks all spawn points and returns a spawn location if there are no other players in range
 	Vector3 GetClearSpawn()
 	{
+
+		//TODO: Make this better
 
 		Vector3 returnPosition = Vector3.zero;
 
@@ -126,7 +101,7 @@ public class GameController : MonoBehaviour
 
 	}
 
-	//Called when all nodes are destroyed
+	//Called when all of a player's nodes are destroyed
 	public void PlayerDestroyed(GameObject player, Color colour)
 	{
 		//Returns the player colour back to the available colours list
@@ -136,7 +111,7 @@ public class GameController : MonoBehaviour
 		Destroy(player);
 	}
 
-	//Provides the requesting player with a colour from the available colours
+	//Provides the requesting player with a colour from the available colours (colours are managed in the editor)
 	public Color ProvideColour()
 	{
 		//Pick a random colour from the list of colours
@@ -151,6 +126,14 @@ public class GameController : MonoBehaviour
 
 		//Send the colour
 		return returnColour;
+	}
+
+	void SpawnContainer()
+	{
+		//On a random timer...
+		//Pick a random spawn point... (use GetClearSpawn())
+		//Spawn a container if there are no objects within x distance
+		//Repeat
 	}
 
 }

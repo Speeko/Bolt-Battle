@@ -215,9 +215,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beamPrefab: {fileID: 2366509471988199367, guid: a8a5c6f326c2abd4fa32966c6f6e551e, type: 3}
-  startingBeamDistance: 0
-  maxBeamDistance: 4
-  maxAllowedBeamDistance: 0
+  startingBeamDistance: 4
+  currentBeamDistance: 0
+  maxAllowedBeamDistance: 10
+  beamIncreaseIncrement: 1
   ownerNodeList: []
   nodeBeamList: []
   nodePositionlist: []
@@ -233,6 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09883a40fc618c647bfce06db83435bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nodeCentrePoint: {x: 0, y: 0, z: 0}
   nodeList: []
   playerNormalSpeed: 5
   playerSlowedSpeed: 2

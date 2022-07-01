@@ -94,6 +94,15 @@ public class BeamCollisions : MonoBehaviour
 			//If we're colliding with another beam - remember what the beam is.
 			collidingBeam = collider.gameObject;
 		}
+
+		//Check if our beam is colliding with a container
+		if (collider.gameObject.tag == "Container")
+		{
+			//If our beam collides with a container - then call OpenContainer() on the container
+			Debug.Log("Beam " + gameObject + " has collided with " + collider.gameObject);
+			ContainerController containerController = collider.gameObject.GetComponent<ContainerController>();
+			containerController.OpenContainer();
+		}
 	}
 
 }
