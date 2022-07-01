@@ -40,13 +40,22 @@ public class BeamCollisions : MonoBehaviour
 	{
 		//TODO: Make this more robust and don't call in update
 		//Check if there's a beam we're colliding with
-		if (collidingBeam != null)
+		if (collidingBeam != null && collidingBeam.activeInHierarchy == true)
 		{
 			foreach (GameObject node in ownerNodes)
 			{
 				//If there's a beam we're colliding with - increase the nodes speed
 				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
 				nodeController.IncreaseNodeSpeed(0);
+			}
+		}
+		else
+		{
+			foreach (GameObject node in ownerNodes)
+			{
+				//If we're not colliding with a beam, set our speed to slow
+				NodeController nodeController = node.gameObject.GetComponent<NodeController>();
+				nodeController.DecreaseNodeSpeed(0);
 			}
 		}
 
@@ -65,7 +74,7 @@ public class BeamCollisions : MonoBehaviour
 		}
 	}
 
-	void OnTriggerStay(Collider collider)
+	void OnTriggerEnter(Collider collider)
 	{
 		if (collider.gameObject.tag == "Node" || collider.gameObject.tag == "EnemyAI")
 		{
@@ -76,6 +85,7 @@ public class BeamCollisions : MonoBehaviour
 
 				//We killed a node, tell our playerController about it
 				playerController.GotKill();
+
 			}
 		}
 
@@ -83,14 +93,6 @@ public class BeamCollisions : MonoBehaviour
 		{
 			//If we're colliding with another beam - remember what the beam is.
 			collidingBeam = collider.gameObject;
-		}
-	}
-
-	void OnTriggerExit(Collider collider)
-	{
-		if (collider.gameObject.tag == "Beam")
-		{
-			collidingBeam = null;
 		}
 	}
 
